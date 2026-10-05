@@ -353,3 +353,153 @@ and learning.
   appropriate evidence.
 - If the user cannot explain an important part of the implementation, prefer
   teaching that part before adding more complexity.
+
+
+
+  ## Testing and Verification Rules
+
+Every meaningful implementation or bug fix should be verified with
+observable evidence.
+
+The goal of testing in this project is not only to detect failures, but
+also to understand why the system behaves as it does.
+
+### General Verification Process
+
+For meaningful changes, follow this sequence when practical:
+
+1. Define the expected behavior.
+2. Predict what should happen before running the code.
+3. Run the smallest experiment that can verify the behavior.
+4. Observe the actual result.
+5. Compare the actual result with the prediction.
+6. Explain any difference.
+7. Only then consider the behavior verified.
+
+Do not claim that something works only because the code looks correct.
+
+### Automated Tests
+
+- Add automated tests when behavior can be verified independently and
+  repeatedly.
+- Prefer small tests with one clear purpose.
+- Protocol encoding and decoding should be testable without opening a
+  network socket.
+- Test normal behavior as well as important invalid or boundary inputs.
+- When a test fails, explain what behavior the test expected and what
+  actually happened before changing the implementation.
+- Do not modify a correct test merely to make failing code pass.
+- When fixing a bug, add or update a test that demonstrates the failure
+  when practical.
+
+### Network Verification
+
+Network behavior should be verified at more than one layer when useful.
+
+Possible evidence includes:
+
+- Application logs.
+- Bytes passed to `send()` or `sendall()`.
+- Bytes returned by `recv()`.
+- Socket state and socket errors.
+- Operating-system networking information.
+- Wireshark packet captures.
+- Automated test results.
+
+Do not assume that application logs alone describe what happened on the
+network.
+
+When using Wireshark, relate captured packets or frames back to the
+application behavior that caused them.
+
+For example:
+
+Application action
+    ↓
+Socket API call
+    ↓
+Operating-system networking behavior
+    ↓
+TCP or UDP
+    ↓
+IP
+    ↓
+Ethernet
+    ↓
+Observed packet/frame
+
+### Protocol Verification
+
+When implementing protocol messages, verify both the logical message and
+its byte representation.
+
+Where applicable, check:
+
+- Field values.
+- Field sizes.
+- Byte order.
+- Header structure.
+- Payload length.
+- Message boundaries.
+- Encoding and decoding symmetry.
+- Invalid or malformed input.
+- Partial data.
+- Multiple messages received together.
+
+When a protocol message is transmitted, be able to compare the expected
+byte sequence with the bytes produced by the implementation.
+
+### Failure Testing
+
+Failures are intentional learning opportunities in this project.
+
+When appropriate, deliberately test conditions such as:
+
+- Connecting when no server is listening.
+- Server termination while a client is connected.
+- Client termination while a server is waiting for data.
+- Receive timeout.
+- Partial application messages.
+- Invalid protocol headers.
+- Incorrect payload lengths.
+- Unexpected connection closure.
+
+Do not automatically hide or recover from these failures before their
+behavior has been observed and understood.
+
+For each important failure, identify which layer detected or reported the
+problem.
+
+### Packet Capture Verification
+
+When packet analysis is part of the current learning stage:
+
+- Predict what should appear in the capture before inspecting it.
+- Identify the relevant Ethernet, IP, TCP/UDP, and application-protocol
+  information.
+- Correlate application actions with captured network traffic.
+- Distinguish application messages from TCP segments, IP packets, and
+  Ethernet frames.
+- Do not assume a one-to-one relationship between application writes,
+  TCP segments, and application reads.
+- Use packet captures as evidence, not as a substitute for understanding
+  the code and operating-system behavior.
+
+### Before Considering a Change Complete
+
+For a meaningful code change, the agent should help answer:
+
+- What behavior were we trying to create or change?
+- What did we expect to happen?
+- How did we test it?
+- What actually happened?
+- What evidence supports the conclusion?
+- Which part was handled by our application?
+- Which part was handled by Python or an external library?
+- Which part was handled by the operating system or network stack?
+- What did we learn from the experiment?
+
+A change is not considered fully understood merely because it executes
+without an exception.
+
+
