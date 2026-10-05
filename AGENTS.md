@@ -1,5 +1,6 @@
 # AutomotiveNetworkLab - Agent Instructions
 
+
 ## Purpose
 
 AutomotiveNetworkLab is a personal project for learnign automotive network 
@@ -23,6 +24,7 @@ networking concepts.
 
 The primary objective is learning and understanding, not merely producing
 working code.
+
 
 ## Learning and Teaching Rules
 
@@ -59,3 +61,41 @@ When helping with this project:
 - Do not move to a more advanced project stage until the current behavior
   can be explained and verified.
 - Never sacrifice understanding merely to make the code work.
+
+
+## Project Roadmap
+
+The project should evolve incrementally. Each stage exists to teach a
+specific networking or software-engineering concept before introducing
+the next layer.
+
+The planned progression is:
+
+1. Build and understand a basic TCP client and server.
+2. Observe TCP connection establishment and termination in Wireshark.
+3. Send and receive application data over TCP.
+4. Design a simple application message containing a header and payload.
+5. Understand message framing over the TCP byte stream.
+6. Add timeouts, connection management, and keep-alive behavior.
+7. Simulate connection failures and study how the application, operating
+   system, and TCP stack react.
+8. Build a simplified Diagnostic over Internet Protocol (DoIP) layer.
+9. Carry simple Unified Diagnostic Services (UDS) messages inside DoIP.
+10. Reimplement the core protocol component in C++.
+11. Expose the C++ implementation to Python using pybind11.
+12. Expand the lab to study additional automotive communication protocols,
+    including CAN and their relationship to higher-level diagnostic
+    protocols.
+
+Do not jump ahead in the roadmap merely because a more advanced solution
+would be easier or more realistic.
+
+When working on a stage:
+
+- Keep the implementation focused on the concept currently being studied.
+- Avoid adding future protocol features prematurely.
+- Explain what new responsibility is being introduced at that stage.
+- Relate the new stage to the layers already understood.
+- Preserve earlier simple implementations when they are useful for
+  comparison and learning.
+- Prefer experiments that make protocol behavior observable.
