@@ -1,6 +1,6 @@
 import socket
 
-from utlitiy.logger import create_logger
+from utility.logger import create_logger
 from protocol.message import encode_message, decode_message
 
 logger = create_logger("TCP-Client")
