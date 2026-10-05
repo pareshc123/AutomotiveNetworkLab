@@ -67,6 +67,11 @@ experiments that make protocol behavior observable.
 
 ## Architecture
 
+The current directory structure reflects the present TCP learning stage and is not 
+intended to define the final architecture of AutomotiveNetworkLab. As new communication 
+technologies are introduced, discuss and evolve the structure deliberately rather than 
+forcing CAN, DoIP, UDS, or other protocols into TCP-specific directories.
+
 Keep responsibilities separated and dependencies simple.
 
 - `TCP_ComLab/`
