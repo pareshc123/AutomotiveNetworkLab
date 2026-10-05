@@ -235,3 +235,121 @@ Network
 
 Later abstractions are allowed once the underlying responsibilities and
 data flow have been understood.
+
+
+## Coding and Implementation Rules
+
+Code in this project should prioritize clarity, correctness, observability,
+and learning.
+
+### General Implementation Rules
+
+- Prefer simple and explicit implementations over clever or highly abstract
+  solutions.
+- Make small, focused changes rather than large rewrites.
+- Do not refactor unrelated code while implementing a feature or fixing a bug.
+- Do not introduce a new framework, library, dependency, design pattern, or
+  abstraction without first explaining why it is needed.
+- Prefer the Python standard library when it clearly provides the functionality
+  required for the current learning objective.
+- Do not implement future roadmap features prematurely.
+- Preserve working educational examples when they are still useful for
+  understanding or comparison.
+- Before replacing an existing implementation, explain what limitation of the
+  current implementation requires the change.
+
+### Python
+
+- Use Python 3.12 unless the project explicitly changes its supported version.
+- Use 4 spaces for indentation.
+- Use clear and descriptive names for variables, functions, classes, and
+  modules.
+- Use type hints where they improve understanding of interfaces and data flow.
+- Add docstrings to public functions, classes, and methods when they help
+  explain purpose, inputs, outputs, or behavior.
+- Keep functions focused on one clear responsibility.
+- Prefer readable code over compressed one-line expressions.
+- Avoid unnecessary global state.
+- Use `if __name__ == "__main__":` when a module is intended to be executable
+  directly.
+
+### Networking Code
+
+- Keep socket operations explicit while the underlying networking behavior is
+  being learned.
+- Do not replace direct socket programming with a higher-level networking
+  framework unless explicitly requested or the underlying socket behavior has
+  already been understood.
+- Clearly distinguish strings, encoded bytes, protocol messages, and data
+  received from sockets.
+- Do not assume that one call to `send()` corresponds to one call to `recv()`.
+- Do not assume that one TCP segment corresponds to one application message.
+- Treat TCP as a byte-stream transport and implement application-message
+  boundaries explicitly when framing is introduced.
+- Make buffer sizes, timeouts, addresses, ports, and other networking values
+  understandable rather than hiding them without explanation.
+- Explain relevant socket errors and operating-system behavior instead of
+  merely suppressing exceptions.
+
+### Protocol Code
+
+- Keep serialization and deserialization logic separate from socket
+  communication.
+- Make protocol fields and byte layouts explicit.
+- When binary fields are introduced, document their size, meaning, byte order,
+  and valid range.
+- Validate protocol inputs where doing so makes protocol behavior clearer and
+  safer.
+- Encoding and decoding operations should be understandable and testable
+  independently from the network.
+- Do not silently discard malformed or unexpected protocol data.
+- When parsing fails, make the reason observable through an appropriate error
+  or diagnostic message.
+
+### Logging and Observability
+
+- Use the project's logging helper instead of adding unrelated logging
+  mechanisms without a reason.
+- Prefer meaningful log messages that describe important state transitions,
+  transmitted data, received data, errors, and connection lifecycle events.
+- Do not use logging as a substitute for understanding program behavior.
+- When useful for protocol learning, show important byte data in a readable
+  representation such as hexadecimal while preserving the original bytes.
+- Never log passwords, API keys, authentication tokens, private credentials,
+  or other secrets.
+
+### Error Handling
+
+- Do not catch exceptions only to hide them.
+- Catch specific exceptions when the program can meaningfully handle or
+  explain them.
+- Preserve useful diagnostic information when reporting failures.
+- During learning exercises, explain where an error originated and which
+  software or networking layer produced it.
+- Do not add retry loops, fallback behavior, or automatic recovery until the
+  failure being handled has first been understood.
+
+### Dependencies
+
+- Do not add external Python packages merely for convenience when the standard
+  library is sufficient for the learning objective.
+- Before adding a dependency, explain:
+  1. what problem it solves,
+  2. why the existing project cannot reasonably solve that problem,
+  3. what abstraction the dependency introduces, and
+  4. what the user would no longer see or implement directly.
+- Record required Python dependencies in the project's dependency file when
+  such dependencies are introduced.
+
+### AI-Generated Changes
+
+- Never assume generated code is correct merely because it runs.
+- Explain significant generated code before considering the task complete.
+- Keep AI-generated changes small enough that the user can inspect and
+  understand them.
+- After changing code, review the resulting diff and identify the important
+  changes.
+- Verify behavior through execution, tests, logs, packet captures, or other
+  appropriate evidence.
+- If the user cannot explain an important part of the implementation, prefer
+  teaching that part before adding more complexity.
