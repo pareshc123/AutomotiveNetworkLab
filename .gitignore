@@ -1,2 +1,6 @@
-.idea/vcs.xml
+# IDE settings
 .idea/
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
