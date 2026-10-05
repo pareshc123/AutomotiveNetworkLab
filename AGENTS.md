@@ -156,7 +156,7 @@ For meaningful changes:
 6. Explain important differences.
 
 - Prefer small tests with one clear purpose.
-- Test protocol encoding and decoding independently from sockets.
+- Test protocol encoding and decoding independently of sockets.
 - Test important invalid and boundary inputs when relevant.
 - When fixing a bug, reproduce and understand the failure before fixing it.
 - Do not change a correct test merely to make failing code pass.
