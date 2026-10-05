@@ -99,3 +99,139 @@ When working on a stage:
 - Preserve earlier simple implementations when they are useful for
   comparison and learning.
 - Prefer experiments that make protocol behavior observable.
+
+
+## Architecture and Layer Boundaries
+
+Keep responsibilities separated so that each layer can be understood,
+tested, and changed independently.
+
+Current project structure:
+
+AutomotiveNetworkLab/
+├── TCP_ComLab/
+│   ├── client.py
+│   └── server.py
+├── protocol/
+│   └── message.py
+└── utility/
+    └── logger.py
+
+### TCP_ComLab/
+
+Responsible for socket-based TCP communication.
+
+This layer may:
+
+- Create and configure sockets.
+- Connect to servers.
+- Bind, listen, and accept connections.
+- Send and receive bytes through sockets.
+- Manage connection lifecycle and socket-related errors.
+
+This layer should not define application message formats or hide protocol
+encoding and decoding inside socket-handling code.
+
+### protocol/
+
+Responsible for application-protocol data and its representation.
+
+This layer may:
+
+- Define message structures.
+- Encode application data into bytes.
+- Decode bytes into application data.
+- Define and validate headers, payloads, message types, lengths, and other
+  protocol fields as they are introduced.
+
+This layer should not:
+
+- Create sockets.
+- Connect to network endpoints.
+- Listen for connections.
+- Depend on TCP-specific connection behavior unless a future protocol
+  explicitly requires that relationship.
+
+### utility/
+
+Responsible for small reusable support functionality that is not part of
+the communication protocol itself.
+
+Examples include:
+
+- Logging helpers.
+- Generic debugging helpers.
+- Other shared utilities introduced when there is a clear need.
+
+Do not move networking or protocol responsibilities into utility/ merely
+to make them reusable.
+
+### Dependency Direction
+
+Keep dependencies understandable and intentional.
+
+For the current project:
+
+TCP_ComLab
+    ├── may use protocol
+    └── may use utility
+
+protocol
+    └── should remain independent of TCP_ComLab
+
+utility
+    └── should remain independent of the protocol and networking layers
+        whenever practical.
+
+Avoid circular dependencies between packages.
+
+### Application vs Operating System Responsibilities
+
+Always distinguish between behavior implemented by this project and
+behavior provided by the operating system or networking stack.
+
+For example:
+
+Application code
+    ↓
+Python socket API
+    ↓
+Operating-system socket interface
+    ↓
+Kernel TCP/UDP implementation
+    ↓
+IP
+    ↓
+Network interface
+    ↓
+Ethernet / physical network
+
+Calling socket.send(), socket.sendall(), or socket.recv() does not mean
+that the application implements TCP. The application provides or receives
+data through the socket API; the operating system's networking stack
+implements TCP/IP behavior.
+
+When explaining network behavior, identify which layer is responsible for
+the observed behavior.
+
+### Preserve Layer Visibility While Learning
+
+Do not combine layers merely to reduce the amount of code.
+
+During the learning stages, prefer explicit boundaries that make the path
+of data visible:
+
+Application data
+    ↓
+Protocol encoding
+    ↓
+Bytes
+    ↓
+Socket API
+    ↓
+Operating-system network stack
+    ↓
+Network
+
+Later abstractions are allowed once the underlying responsibilities and
+data flow have been understood.
