@@ -1,7 +1,7 @@
 import socket
 
 from utility.logger import create_logger
-from TCP_ComLab.socket_helper import receive_exactly
+from tcp_transport.socket_helper import receive_exactly
 from protocol.message import encode_message, decode_message, parse_payload_length
 
 logger = create_logger("TCP-Server")
