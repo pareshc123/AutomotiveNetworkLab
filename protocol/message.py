@@ -18,7 +18,7 @@ def encode_message(message: str) -> bytes:
     header = payload_len.to_bytes(4, "big")
 
     # insert the header length to message
-    frame = header + message
+    frame = header + payload
 
     return frame
 
