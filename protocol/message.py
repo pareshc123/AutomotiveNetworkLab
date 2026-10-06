@@ -1,3 +1,4 @@
+from TCP_ComLab.socket_helper import receive_exactly
 
 def encode_message(message: str) -> bytes:
     """
@@ -6,7 +7,20 @@ def encode_message(message: str) -> bytes:
     if not isinstance(message, str):
         raise TypeError("Message must be a string")
     
-    return message.encode("utf-8")
+
+    # UTF-encoding
+    payload = message.encode("utf-8")
+
+    # get the length of the message
+    payload_len = len(payload)
+
+    # convert the length to bytes
+    header = payload_len.to_bytes(4, "big")
+
+    # insert the header length to message
+    frame = header + message
+
+    return frame
 
 def decode_message(data: bytes) -> str:
     """
