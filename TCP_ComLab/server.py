@@ -1,7 +1,8 @@
 import socket
 
 from utility.logger import create_logger
-from protocol.message import encode_message, decode_message
+from TCP_ComLab.socket_helper import receive_exactly
+from protocol.message import encode_message, decode_message, parse_payload_length
 
 logger = create_logger("TCP-Server")
 
@@ -43,10 +44,22 @@ class ServerSocket:
 
         logger.info("Client connected from %s:%s", client_address[0], client_address[1])
 
-        # Wait for up to 1024 bytes from the client
-        received_data = self.connection_socket.recv(1024)
-        logger.info(f"Raw data received: {received_data}")
-        message = decode_message(received_data)
+        # Parse Header
+        logger.debug("Extracting Header")
+        header = receive_exactly(self.connection_socket, 4)
+        logger.debug("Header: %r",header)
+
+        # Get the payload length from header
+        payload_length = parse_payload_length(header)
+        logger.debug(f"Payload Length: {payload_length}")
+
+        # Receive the payload
+        logger.debug("Extracting payload")
+        payload = receive_exactly(self.connection_socket, payload_length)
+        logger.debug(f"Payload: {payload}")
+        
+        # Decode UTF-8 payload bytes into a Python string
+        message = decode_message(payload)
 
         logger.info("Message received: %s", message)
 
