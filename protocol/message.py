@@ -30,3 +30,19 @@ def decode_message(data: bytes) -> str:
         raise TypeError("Received data must by bytes")    
     
     return data.decode("utf-8")
+
+
+def parse_payload_length(header: bytes) -> int:
+    """
+    Convert a 4-byte big-endian header into the payload length.
+    """
+
+    if not isinstance(header, bytes):
+        raise TypeError("Header must be in bytes")
+    
+    if len(header) != 4:
+        raise ValueError("Header must be exactly 4 bytes")
+    
+    payload_length = int.from_bytes(header, "big")
+
+    return payload_length
