@@ -42,6 +42,9 @@ class ServerSocket:
             self.server_socket.accept()
         )
 
+        # Set a timeout to avoid infinite waiting period and blocking of python thread
+        self.connection_socket.settimeout(5.0)
+
         logger.info("Client connected from %s:%s", client_address[0], client_address[1])
 
         # Parse Header
