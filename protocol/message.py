@@ -1,5 +1,3 @@
-from TCP_ComLab.socket_helper import receive_exactly
-
 def encode_message(message: str) -> bytes:
     """
     Convert a Python string into bytes for socket transmission.
