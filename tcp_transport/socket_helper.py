@@ -1,4 +1,7 @@
 def receive_exactly(sock, n):
+    """
+     The function calculates the exact bytes required for the header, data etc
+    """
     received_data = b""
     while len(received_data) < n:
 
