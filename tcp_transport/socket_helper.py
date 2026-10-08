@@ -1,6 +1,14 @@
 def receive_exactly(sock, n):
     """
-     The function calculates the exact bytes required for the header, data etc
+     Receive exactly `n` bytes from a connected TCP socket.
+
+    TCP delivers an ordered byte stream, so one call to `sock.recv()` may
+    return fewer bytes than requested. This function keeps calling `recv()`
+    until `n` bytes have been collected.
+
+    Raises:
+        ConnectionError: If the peer closes the connection before all expected
+            bytes are received.
     """
     received_data = b""
     while len(received_data) < n:
