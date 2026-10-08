@@ -4,7 +4,6 @@ def encode_message(message: str) -> bytes:
     """
     if not isinstance(message, str):
         raise TypeError("Message must be a string")
-    
 
     # UTF-encoding
     payload = message.encode("utf-8")
@@ -20,13 +19,14 @@ def encode_message(message: str) -> bytes:
 
     return frame
 
+
 def decode_message(data: bytes) -> str:
     """
     Convert a received sockets bytes back into python string.
     """
     if not isinstance(data, bytes):
-        raise TypeError("Received data must by bytes")    
-    
+        raise TypeError("Received data must by bytes")
+
     return data.decode("utf-8")
 
 
@@ -37,10 +37,10 @@ def parse_payload_length(header: bytes) -> int:
 
     if not isinstance(header, bytes):
         raise TypeError("Header must be in bytes")
-    
+
     if len(header) != 4:
         raise ValueError("Header must be exactly 4 bytes")
-    
+
     payload_length = int.from_bytes(header, "big")
 
     return payload_length

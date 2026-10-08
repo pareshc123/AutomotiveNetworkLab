@@ -1,5 +1,4 @@
 def receive_exactly(sock, n):
-    
     received_data = b""
     while len(received_data) < n:
 
@@ -11,6 +10,5 @@ def receive_exactly(sock, n):
             raise ConnectionError("Connection closed before all expected bytes were received")
 
         received_data += chunk
-        
-    
+
     return received_data
