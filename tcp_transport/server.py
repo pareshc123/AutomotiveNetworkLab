@@ -96,6 +96,8 @@ if __name__ == "__main__":
     try:
         server.create_socket()
         server.start()
+    except TimeoutError:
+        logger.warning("Receive timeout: client did not provide the expected data within 5 seconds")
 
     except OSError as error:
         logger.error("Socket error: %s", error)
