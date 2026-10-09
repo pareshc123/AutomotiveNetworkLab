@@ -43,7 +43,7 @@ class ClientSocket:
         # Parse Header
         logger.debug("Extracting Header")
         header = receive_exactly(self.client_socket, 4)
-        logger.debug("Header: %r",header)
+        logger.debug("Header: %r", header)
 
         # Get the payload length from header
         payload_length = parse_payload_length(header)
