@@ -97,7 +97,21 @@ if __name__ == "__main__":
         server.create_socket()
         server.start()
     except TimeoutError:
-        logger.warning("Receive timeout: client did not provide the expected data within 5 seconds")
+        logger.warning(
+            "Receive timeout while waiting for an application frame from the connected client"
+        )
+
+    except ConnectionResetError as error:
+        logger.error(
+            "Connection reset by peer while receiving an application frame: %s",
+            error,
+        )
+
+    except ConnectionError as error:
+        logger.warning(
+            "Peer closed the TCP connection before the complete application frame was received: %s",
+            error,
+        )
 
     except OSError as error:
         logger.error("Socket error: %s", error)

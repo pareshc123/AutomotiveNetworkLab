@@ -76,8 +76,13 @@ if __name__ == "__main__":
         client.create_socket()
         client.start()
 
-    except ConnectionRefusedError:
-        logger.error("Connection refused. Is the server running?")
+    except ConnectionRefusedError as error:
+        logger.error(
+            "Connection to %s:%s refused; is the server running? %s",
+            client.ip_address,
+            client.port,
+            error,
+        )
 
     except OSError as error:
         logger.error("Socket error: %s", error)

@@ -18,7 +18,9 @@ def receive_exactly(sock, n):
         chunk = sock.recv(remaining)
 
         if chunk == b"":
-            raise ConnectionError("Connection closed before all expected bytes were received")
+            raise ConnectionError(
+                f"Connection closed after receiving {len(received_data)} of {n} expected bytes"
+            )
 
         received_data += chunk
 
