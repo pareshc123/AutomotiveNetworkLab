@@ -85,7 +85,14 @@ if __name__ == "__main__":
         )
 
     except OSError as error:
-        logger.error("Socket error: %s", error)
+        if type(error) is ConnectionError:
+            logger.warning(
+                "Peer closed the TCP connection before the complete response frame "
+                "was received: %s",
+                error,
+            )
+        else:
+            logger.error("Socket error: %s", error)
 
     finally:
         client.close()
