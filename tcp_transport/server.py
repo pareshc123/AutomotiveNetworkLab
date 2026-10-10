@@ -103,7 +103,7 @@ if __name__ == "__main__":
 
     except ConnectionResetError as error:
         logger.error(
-            "Connection reset by peer while receiving an application frame: %s",
+            "TCP connection reset by peer: %s",
             error,
         )
 
