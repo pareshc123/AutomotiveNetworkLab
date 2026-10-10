@@ -1,4 +1,42 @@
+"""
+Experiment: TCP Keep-Alive
 
+Demonstrates how Linux sends TCP keep-alive probes when a connection
+is idle, without Python sending or receiving application data.
+
+Run:
+    python3 -m experiments.tcp_keepalive
+
+Configuration (client socket):
+    SO_KEEPALIVE  = 1   # Enable TCP keep-alive
+    TCP_KEEPIDLE  = 10  # First probe after 10 seconds idle
+    TCP_KEEPINTVL = 3   # Interval between unanswered probes
+    TCP_KEEPCNT   = 3   # Maximum unanswered probes
+
+Experiment:
+    1. Establish a TCP connection on localhost.
+    2. Enable keep-alive on the client socket.
+    3. Keep the connection idle for 35 seconds.
+    4. Linux sends keep-alive probes; the server TCP stack sends ACKs.
+    5. Close the connection normally.
+
+Wireshark:
+    Interface: lo
+    Display filter: tcp.port == <server_port>
+    Keep-alive filter:
+        tcp.analysis.keep_alive || tcp.analysis.keep_alive_ack
+
+Expected:
+    - TCP handshake (SYN, SYN/ACK, ACK).
+    - Keep-alive probes approximately every 10 seconds.
+    - Server ACKs each probe without application involvement.
+    - No application payload is exchanged.
+    - Normal TCP connection closure (FIN).
+
+Note:
+    TCP_KEEPINTVL and TCP_KEEPCNT matter when probes go unanswered.
+    This experiment demonstrates a healthy, responsive TCP connection.
+"""
 
 import socket
 import sys
