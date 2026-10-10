@@ -50,7 +50,7 @@ class ServerSocket:
         # Parse Header
         logger.debug("Extracting Header")
         header = receive_exactly(self.connection_socket, 4)
-        logger.debug("Header: %r",header)
+        logger.debug("Header: %r", header)
 
         # Get the payload length from header
         payload_length = parse_payload_length(header)
@@ -96,9 +96,10 @@ if __name__ == "__main__":
     try:
         server.create_socket()
         server.start()
-    except TimeoutError:
+    except TimeoutError as error:
         logger.warning(
-            "Receive timeout while waiting for an application frame from the connected client"
+            "TCP socket operation timed out: %s",
+            error,
         )
 
     except ConnectionResetError as error:
@@ -108,10 +109,13 @@ if __name__ == "__main__":
         )
 
     except ConnectionError as error:
-        logger.warning(
-            "Peer closed the TCP connection before the complete application frame was received: %s",
-            error,
-        )
+        if type(error) is ConnectionError:
+            logger.warning(
+                "Peer closed the TCP connection before the complete application frame was received: %s",
+                error,
+            )
+        else:
+            logger.error("TCP connection error: %s", error)
 
     except OSError as error:
         logger.error("Socket error: %s", error)
