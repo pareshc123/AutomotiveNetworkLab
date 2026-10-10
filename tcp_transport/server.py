@@ -116,5 +116,8 @@ if __name__ == "__main__":
     except OSError as error:
         logger.error("Socket error: %s", error)
 
+    except UnicodeDecodeError as error:
+        logger.error("Invalid UTF-8 in request payload: %s", error)
+
     finally:
         server.close()
